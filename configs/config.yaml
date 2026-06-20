@@ -1,0 +1,35 @@
+# Training Hyperparameters
+model_name: "EleutherAI/pythia-160m"
+dataset_name: "argilla/enron-email-dataset"
+dataset_split: "train"
+text_column: "text"
+max_train_samples: 1000
+num_epochs: 5
+batch_size: 8
+learning_rate: 2e-4
+warmup_steps: 100
+max_seq_len: 512
+gradient_accumulation_steps: 4
+weight_decay: 0.01
+fp16: true
+seed: 42
+logging_steps: 10
+save_steps: 500
+save_total_limit: 2
+report_to: "none"
+
+# LoRA Configuration
+use_lora: true
+lora_r: 8
+lora_alpha: 16
+lora_dropout: 0.05
+target_modules: ["query_key_value"]
+
+# Masking
+spacy_model: "en_core_web_sm"
+ner_labels: ["PERSON", "ORG", "GPE", "LOC", "EMAIL", "PHONE", "DATE"]
+rmft_probability: 0.15
+threshold_percentile: 75
+
+# Paths & Settings
+output_dir: "./results"
