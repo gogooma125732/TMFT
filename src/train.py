@@ -42,10 +42,10 @@ def load_tokenizer(model_name: str):
 
 
 def load_causal_lm(model_name: str, use_lora: bool, config: dict[str, Any]):
-    model_kwargs = {}
-    if config.get("fp16") and torch.cuda.is_available():
-        model_kwargs["torch_dtype"] = torch.float16
-    model = AutoModelForCausalLM.from_pretrained(model_name, **model_kwargs)
+    # Keep trainable weights in FP32 and let Trainer/Accelerate handle AMP when
+    # fp16=True. Loading the model directly in FP16 can make LoRA gradients FP16,
+    # which triggers "Attempting to unscale FP16 gradients" in torch GradScaler.
+    model = AutoModelForCausalLM.from_pretrained(model_name)
     if not use_lora:
         return model
 
@@ -57,7 +57,11 @@ def load_causal_lm(model_name: str, use_lora: bool, config: dict[str, Any]):
         bias="none",
         task_type=TaskType.CAUSAL_LM,
     )
-    return get_peft_model(model, peft_config)
+    model = get_peft_model(model, peft_config)
+    for parameter in model.parameters():
+        if parameter.requires_grad:
+            parameter.data = parameter.data.float()
+    return model
 
 
 def load_text_dataset(config: dict[str, Any]) -> Dataset:
