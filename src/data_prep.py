@@ -11,6 +11,7 @@ from typing import Any, Iterable
 
 import numpy as np
 from datasets import Dataset, DatasetDict, load_from_disk
+from tqdm.auto import tqdm
 
 from .train import load_spacy_model, load_text_dataset, load_tokenizer
 
@@ -44,10 +45,14 @@ def truncate_to_tokens(text: str, tokenizer, max_tokens: int) -> str:
     return text[: offsets[-1][1]] if offsets else ""
 
 
-def detect_pii_spans(text: str, nlp_model) -> list[dict[str, Any]]:
+def detect_pii_spans(text: str, nlp_model=None, doc=None) -> list[dict[str, Any]]:
     """Detect deduplicated PII spans with spaCy plus email/phone regexes."""
+    if doc is None:
+        if nlp_model is None:
+            raise ValueError("nlp_model or precomputed doc is required")
+        doc = nlp_model(text)
     spans: list[dict[str, Any]] = []
-    for entity in nlp_model(text).ents:
+    for entity in doc.ents:
         if entity.label_ in SPACY_PII_LABELS:
             spans.append(
                 {"start": entity.start_char, "end": entity.end_char, "type": entity.label_, "value": entity.text}
@@ -153,9 +158,10 @@ def prepare_experiment_data(config: dict[str, Any], force: bool = False) -> tupl
     max_tokens = int(config.get("max_seq_len", 512))
     max_prepared = int(config.get("max_prepared_samples", 6000))
 
-    rows: list[dict[str, Any]] = []
+    candidates: list[tuple[int, str]] = []
     seen_text_hashes: set[str] = set()
-    for source_index, row in enumerate(source):
+    print(f"Preprocessing {len(source):,} source emails on CPU...")
+    for source_index, row in enumerate(tqdm(source, total=len(source), desc="Clean/tokenize")):
         text = truncate_to_tokens(clean_email_text(row.get(text_column)), tokenizer, max_tokens)
         if not text:
             continue
@@ -163,7 +169,18 @@ def prepare_experiment_data(config: dict[str, Any], force: bool = False) -> tupl
         if text_hash in seen_text_hashes:
             continue
         seen_text_hashes.add(text_hash)
-        spans = detect_pii_spans(text, nlp_model)
+        candidates.append((source_index, text))
+
+    disabled_pipes = [name for name in nlp_model.pipe_names if name not in {"tok2vec", "ner"}]
+    docs = nlp_model.pipe(
+        (text for _, text in candidates),
+        batch_size=int(config.get("spacy_batch_size", 32)),
+        disable=disabled_pipes,
+    )
+    rows: list[dict[str, Any]] = []
+    iterator = zip(candidates, docs)
+    for (source_index, text), doc in tqdm(iterator, total=len(candidates), desc="PII detection"):
+        spans = detect_pii_spans(text, doc=doc)
         if not spans:
             continue
         rows.append(
@@ -177,6 +194,7 @@ def prepare_experiment_data(config: dict[str, Any], force: bool = False) -> tupl
         )
         if len(rows) >= max_prepared:
             break
+    print(f"Prepared {len(rows):,} unique PII-containing emails.")
     if len(rows) < 10:
         raise ValueError(f"Only {len(rows)} PII-containing samples were prepared; at least 10 are required.")
 
