@@ -4,17 +4,19 @@ dataset_name: "cc0de/Enron_email"
 dataset_split: "member"
 # Leave as null to auto-detect a usable text column from common names.
 text_column:
-max_train_samples: 1000
-allow_synthetic_fallback: true
+max_train_samples: 7500
+max_prepared_samples: 6000
+max_eval_samples: 500
+allow_synthetic_fallback: false
 # Optional: upload a local .csv/.json/.jsonl/.txt dataset to Vessel and set this.
 # The file must contain a text column, or the first column will be renamed to text.
 local_data_path:
 num_epochs: 5
-batch_size: 8
+batch_size: 2
 learning_rate: 2e-4
 warmup_steps: 100
 max_seq_len: 512
-gradient_accumulation_steps: 4
+gradient_accumulation_steps: 16
 weight_decay: 0.01
 fp16: false
 seed: 42
@@ -35,6 +37,19 @@ spacy_model: "en_core_web_sm"
 ner_labels: ["PERSON", "ORG", "GPE", "LOC", "EMAIL", "PHONE", "DATE"]
 rmft_probability: 0.15
 threshold_percentile: 75
+mia_warmup_batches: 50
+max_mask_ratio: 0.5
+
+# Evaluation
+eval_batch_size: 2
+eval_prefix_tokens: 50
+eval_max_new_tokens: 50
+mia_eval_samples: 250
+min_k_percent: 20
+prepared_data_dir: "./data/processed"
+pii_eval_path: "./data/pii_eval.json"
+results_table_dir: "./results/tables"
+save_strategy: "epoch"
 
 # Paths & Settings
 output_dir: "./results"

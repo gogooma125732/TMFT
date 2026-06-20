@@ -1,67 +1,86 @@
-# TMFT Project
+# TMFT: Targeted Masked Fine-Tuning
 
-Targeted Masked Fine-Tuning experiments for reducing PII memorization in causal language models.
+This project tests whether masking privacy-sensitive token losses during LoRA
+fine-tuning reduces PII memorization with less utility degradation than random
+masking. It is an empirical mitigation study, not differential privacy or
+machine unlearning.
 
-## Vessel / Jupyter Setup
+## Vessel Setup
 
-Upload the entire `tmft_project/` directory to Vessel. The notebook is not
-standalone; it imports code from `src/`, reads `configs/config.yaml`, and uses
-`requirements.txt`.
+Upload the entire `tmft_project/` directory and open a terminal in that
+directory.
 
 ```bash
-cd /path/to/tmft_project
 python -m pip install -U pip
+python -m pip uninstall -y transformers peft accelerate tokenizers huggingface_hub datasets
 python -m pip install -r requirements.txt
 python -m spacy download en_core_web_sm
 ```
 
-For Hugging Face upload:
+Restart the Jupyter kernel after installation. The tested compatibility stack
+uses PyTorch 2.3.1, Transformers 4.41.2, PEFT 0.11.1, and Datasets 2.20.0.
+
+## End-to-End Experiment
+
+Prepare real PII-containing Enron splits and a real prefix-target evaluation
+set:
+
+```bash
+python main.py --mode prepare --force_prepare
+```
+
+Train all conditions:
+
+```bash
+python main.py --mode train --method all
+```
+
+Evaluate TER, SER, held-out perplexity, MDP, Loss-MIA AUC, and Min-K MIA AUC:
+
+```bash
+python main.py --mode eval --method all
+```
+
+Generate result figures:
+
+```bash
+python main.py --mode plot
+```
+
+The full pipeline can be launched with:
+
+```bash
+python main.py --mode all --method all --force_prepare
+```
+
+For an interactive run, execute `tmft_experiment.ipynb` from top to bottom.
+
+## Experimental Conditions
+
+- `baseline`: standard LoRA fine-tuning
+- `rmft`: random 15% loss masking
+- `tmft_ner`: loss masking at spaCy plus regex PII spans
+- `tmft_mia`: online token masking where the current model is more confident
+  than the frozen base model
+- `tmft_combined`: union of NER and post-warm-up MIA masks
+
+## Outputs
+
+- `data/processed/`: train, validation, and test DatasetDict
+- `data/pii_eval.json`: automatically generated real PII prefix-target attacks
+- `results/<method>/`: LoRA adapters and training metadata
+- `results/tables/main_results.csv`: submission-ready numeric table
+- `results/figures/`: PNG and PDF privacy/utility figures
+
+Do not report results if preprocessing prints a synthetic fallback warning.
+The final config disables fallback so an unavailable real dataset fails loudly.
+
+## Hugging Face Upload
 
 ```bash
 huggingface-cli login
+python main.py --mode upload --method tmft_combined \
+  --hf_repo_id YOUR_USERNAME/tmft-pythia-160m-tmft-combined
 ```
 
-## Train
-
-```bash
-python main.py --mode train --method tmft_combined --config configs/config.yaml
-```
-
-Or open `tmft_experiment.ipynb` from inside the uploaded `tmft_project/`
-directory and run the cells in order.
-
-Available methods:
-
-- `baseline`
-- `rmft`
-- `tmft_ner`
-- `tmft_mia`
-- `tmft_combined`
-- `all`
-
-## Evaluate PII Extraction
-
-Prepare a JSON or JSONL file with:
-
-```json
-[
-  {
-    "prefix": "Email text prefix...",
-    "ground_truth_target": "sensitive@example.com"
-  }
-]
-```
-
-Then run:
-
-```bash
-python main.py --mode eval --model_dir results/tmft_combined --eval_path data/pii_eval.json
-```
-
-## Upload To Hugging Face
-
-```bash
-python main.py --mode upload --method tmft_combined --model_dir results/tmft_combined --hf_repo_id YOUR_USERNAME/tmft-pythia-160m
-```
-
-Add `--public` only if you want the repository to be public.
+Use `--public` only after checking that the saved artifacts contain no raw PII.

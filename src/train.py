@@ -6,6 +6,7 @@ from dataclasses import dataclass
 import os
 from pathlib import Path
 from typing import Any
+import json
 
 os.environ.setdefault("USE_TF", "0")
 os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
@@ -21,6 +22,7 @@ from transformers import (
     TrainingArguments,
     set_seed,
 )
+from peft import AutoPeftModelForCausalLM
 
 from .masking import DEFAULT_NER_LABELS, mia_mask, ner_mask, random_mask
 
@@ -174,11 +176,17 @@ class TMFTDataCollator:
     ner_labels: set[str] | None = None
     rmft_probability: float = 0.15
     threshold_percentile: float = 75
+    mia_warmup_batches: int = 50
+    max_mask_ratio: float = 0.5
     seed: int = 42
 
     def __post_init__(self):
         self.generator = torch.Generator()
         self.generator.manual_seed(self.seed)
+        self.batches_seen = 0
+        self.masked_tokens = 0
+        self.valid_tokens = 0
+        self.skipped_samples = 0
 
     def __call__(self, features: list[dict[str, Any]]) -> dict[str, torch.Tensor]:
         texts = [row[self.text_column] for row in features]
@@ -194,7 +202,7 @@ class TMFTDataCollator:
         labels = encoded["input_ids"].clone()
         mask = torch.zeros_like(labels, dtype=torch.bool)
 
-        if self.method in {"rmft", "tmft_combined"}:
+        if self.method == "rmft":
             mask |= random_mask(
                 encoded["attention_mask"],
                 probability=self.rmft_probability,
@@ -211,7 +219,8 @@ class TMFTDataCollator:
                 text_for_ner = text[:max_seen_char]
                 mask[row_idx] |= ner_mask(offsets, text_for_ner, self.nlp_model, ner_labels)
 
-        if self.method in {"tmft_mia", "tmft_combined"}:
+        use_mia = self.method in {"tmft_mia", "tmft_combined"} and self.batches_seen >= self.mia_warmup_batches
+        if use_mia:
             if self.target_model is None or self.reference_model is None:
                 raise ValueError("target_model and reference_model are required for MIA masking")
             mask |= mia_mask(
@@ -222,16 +231,39 @@ class TMFTDataCollator:
                 threshold_percentile=self.threshold_percentile,
             )
 
+        valid_counts = encoded["attention_mask"].sum(dim=1).clamp_min(1)
+        mask_ratios = mask.sum(dim=1) / valid_counts
+        keep = mask_ratios <= self.max_mask_ratio
+        if not keep.any():
+            keep[torch.argmin(mask_ratios)] = True
+        self.skipped_samples += int((~keep).sum().item())
+        if not keep.all():
+            encoded = {key: value[keep] for key, value in encoded.items()}
+            labels = labels[keep]
+            mask = mask[keep]
+
+        self.masked_tokens += int(mask.sum().item())
+        self.valid_tokens += int(encoded["attention_mask"].sum().item())
+        self.batches_seen += 1
+
         labels[encoded["attention_mask"] == 0] = -100
         labels[mask] = -100
         encoded["labels"] = labels
         return encoded
+
+    def summary(self) -> dict[str, float | int]:
+        return {
+            "batches_seen": self.batches_seen,
+            "masked_token_ratio": self.masked_tokens / max(self.valid_tokens, 1),
+            "skipped_samples": self.skipped_samples,
+        }
 
 
 def train_model(
     config: dict[str, Any],
     method: str = "tmft_combined",
     train_dataset: Dataset | None = None,
+    eval_dataset: Dataset | None = None,
 ):
     if method not in METHODS:
         raise ValueError(f"Unknown method '{method}'. Choose one of: {METHODS}")
@@ -262,6 +294,8 @@ def train_model(
         ner_labels=set(config.get("ner_labels", DEFAULT_NER_LABELS)),
         rmft_probability=float(config.get("rmft_probability", 0.15)),
         threshold_percentile=float(config.get("threshold_percentile", 75)),
+        mia_warmup_batches=int(config.get("mia_warmup_batches", 50)),
+        max_mask_ratio=float(config.get("max_mask_ratio", 0.5)),
         seed=int(config.get("seed", 42)),
     )
 
@@ -278,6 +312,8 @@ def train_model(
         logging_steps=int(config.get("logging_steps", 10)),
         save_steps=int(config.get("save_steps", 500)),
         save_total_limit=int(config.get("save_total_limit", 2)),
+        evaluation_strategy="epoch" if eval_dataset is not None else "no",
+        save_strategy=config.get("save_strategy", "epoch"),
         report_to=config.get("report_to", "none"),
         remove_unused_columns=False,
         push_to_hub=False,
@@ -287,13 +323,31 @@ def train_model(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
+        eval_dataset=eval_dataset,
         data_collator=collator,
         tokenizer=tokenizer,
     )
     trainer.train()
     trainer.save_model(str(output_dir))
     tokenizer.save_pretrained(str(output_dir))
+    metadata = {
+        "method": method,
+        "model_name": model_name,
+        "train_samples": len(train_dataset),
+        "validation_samples": len(eval_dataset) if eval_dataset is not None else 0,
+        **collator.summary(),
+        "log_history": trainer.state.log_history,
+    }
+    (output_dir / "training_metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     return trainer, tokenizer, output_dir
+
+
+def load_trained_model(model_dir: str | Path):
+    """Load either a saved LoRA adapter or a complete causal language model."""
+    model_dir = Path(model_dir)
+    if (model_dir / "adapter_config.json").exists():
+        return AutoPeftModelForCausalLM.from_pretrained(str(model_dir))
+    return AutoModelForCausalLM.from_pretrained(str(model_dir))
 
 
 def upload_to_huggingface(output_dir: str | Path, repo_id: str, private: bool = True):

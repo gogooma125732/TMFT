@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Iterable, Sequence
+import re
 
 import numpy as np
 import torch
@@ -10,6 +11,8 @@ import torch.nn.functional as F
 
 
 DEFAULT_NER_LABELS = {"PERSON", "ORG", "GPE", "LOC", "EMAIL", "PHONE", "DATE"}
+EMAIL_RE = re.compile(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+")
+PHONE_RE = re.compile(r"(?<!\d)(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]\d{4}(?!\d)")
 
 
 def char_span_to_token_indices(
@@ -47,6 +50,13 @@ def ner_mask(
         )
         if token_indices:
             mask[token_indices] = True
+    for pattern, label in ((EMAIL_RE, "EMAIL"), (PHONE_RE, "PHONE")):
+        if label not in labels:
+            continue
+        for match in pattern.finditer(text):
+            token_indices = char_span_to_token_indices(offset_mapping, match.start(), match.end())
+            if token_indices:
+                mask[token_indices] = True
     return mask
 
 
@@ -87,8 +97,9 @@ def mia_mask(
     target_model,
     reference_model,
     threshold_percentile: float = 75,
+    min_score: float = 0.0,
 ) -> torch.Tensor:
-    """Build a mask from a simple token-level membership-risk score."""
+    """Mask tokens the target predicts better than the frozen base model."""
     device = next(target_model.parameters()).device
     input_ids = input_ids.to(device)
     attention_mask = attention_mask.to(device)
@@ -100,14 +111,19 @@ def mia_mask(
     with torch.no_grad():
         target_loss = _token_nll(target_model, input_ids, attention_mask)
         ref_loss = _token_nll(reference_model, input_ids, attention_mask)
-        score = ref_loss / (target_loss + 1e-8)
-        valid_scores = score[attention_mask.bool()]
+        score = ref_loss - target_loss
+        valid = attention_mask.bool()
+        valid[:, 0] = False
+        valid_scores = score[valid]
         if valid_scores.numel() == 0:
             if target_was_training:
                 target_model.train()
             return torch.zeros_like(attention_mask, dtype=torch.bool)
-        threshold = np.percentile(valid_scores.detach().float().cpu().numpy(), threshold_percentile)
+        threshold = max(
+            float(min_score),
+            float(np.percentile(valid_scores.detach().float().cpu().numpy(), threshold_percentile)),
+        )
         mask = score > threshold
     if target_was_training:
         target_model.train()
-    return (mask & attention_mask.bool()).cpu()
+    return (mask & valid).cpu()
