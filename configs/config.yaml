@@ -1,9 +1,14 @@
 # Training Hyperparameters
 model_name: "EleutherAI/pythia-160m"
-dataset_name: "argilla/enron-email-dataset"
-dataset_split: "train"
-text_column: "text"
+dataset_name: "cc0de/Enron_email"
+dataset_split: "member"
+# Leave as null to auto-detect a usable text column from common names.
+text_column:
 max_train_samples: 1000
+allow_synthetic_fallback: true
+# Optional: upload a local .csv/.json/.jsonl/.txt dataset to Vessel and set this.
+# The file must contain a text column, or the first column will be renamed to text.
+local_data_path:
 num_epochs: 5
 batch_size: 8
 learning_rate: 2e-4

@@ -61,12 +61,35 @@ def load_causal_lm(model_name: str, use_lora: bool, config: dict[str, Any]):
 
 
 def load_text_dataset(config: dict[str, Any]) -> Dataset:
-    dataset_name = config.get("dataset_name", "argilla/enron-email-dataset")
+    dataset_name = config.get("dataset_name", "cc0de/Enron_email")
     dataset_split = config.get("dataset_split", "train")
-    text_column = config.get("text_column", "text")
+    text_column = config.get("text_column")
+    fallback_text_column = text_column or "text"
     max_train_samples = config.get("max_train_samples")
+    local_data_path = config.get("local_data_path")
 
-    dataset = load_dataset(dataset_name, split=dataset_split)
+    if local_data_path:
+        dataset = load_local_text_dataset(local_data_path, text_column=fallback_text_column)
+    elif dataset_name == "synthetic_enron_pii":
+        dataset = build_synthetic_email_dataset(size=int(max_train_samples or 200), text_column=fallback_text_column)
+    else:
+        try:
+            dataset = load_dataset(dataset_name, split=dataset_split)
+        except Exception as exc:
+            if not config.get("allow_synthetic_fallback", True):
+                raise
+            print(
+                f"Warning: could not load dataset '{dataset_name}' ({type(exc).__name__}: {exc}). "
+                "Falling back to synthetic_enron_pii. Use config['local_data_path'] for a real Enron file."
+            )
+            dataset = build_synthetic_email_dataset(size=int(max_train_samples or 200), text_column=fallback_text_column)
+    if not text_column:
+        candidates = ("text", "message", "body", "content", "email", "mail", "Message")
+        text_column = next((column for column in candidates if column in dataset.column_names), None)
+        if not text_column:
+            text_column = dataset.column_names[0]
+        config["text_column"] = text_column
+        print(f"Using text column: {text_column}")
     if text_column not in dataset.column_names:
         raise ValueError(f"Missing text column '{text_column}'. Available: {dataset.column_names}")
 
@@ -74,6 +97,54 @@ def load_text_dataset(config: dict[str, Any]) -> Dataset:
     if max_train_samples:
         dataset = dataset.select(range(min(int(max_train_samples), len(dataset))))
     return dataset
+
+
+def load_local_text_dataset(path: str | Path, text_column: str = "text") -> Dataset:
+    path = Path(path)
+    if not path.exists():
+        raise FileNotFoundError(f"local_data_path does not exist: {path}")
+
+    suffix = path.suffix.lower()
+    if suffix == ".csv":
+        dataset = load_dataset("csv", data_files=str(path), split="train")
+    elif suffix in {".json", ".jsonl"}:
+        dataset = load_dataset("json", data_files=str(path), split="train")
+    elif suffix in {".txt", ".text"}:
+        lines = [line.strip() for line in path.read_text(encoding="utf-8", errors="ignore").splitlines()]
+        dataset = Dataset.from_list([{text_column: line} for line in lines if line])
+    else:
+        raise ValueError("local_data_path must be .csv, .json, .jsonl, or .txt")
+
+    if text_column not in dataset.column_names:
+        first_col = dataset.column_names[0]
+        dataset = dataset.rename_column(first_col, text_column)
+    return dataset
+
+
+def build_synthetic_email_dataset(size: int = 200, text_column: str = "text") -> Dataset:
+    names = ["John Smith", "Mary Johnson", "Kenneth Lay", "Jeff Skilling", "Lisa Taylor"]
+    orgs = ["Enron", "Dynegy", "Portland General", "Houston Trading Desk", "Risk Management"]
+    domains = ["enron.com", "example.com", "corp-mail.com"]
+    cities = ["Houston", "Portland", "New York", "San Francisco", "Calgary"]
+    templates = []
+    for i in range(max(size, 1)):
+        name = names[i % len(names)]
+        org = orgs[i % len(orgs)]
+        city = cities[i % len(cities)]
+        email = f"{name.lower().replace(' ', '.')}{i}@{domains[i % len(domains)]}"
+        phone = f"713-555-{1000 + (i % 9000)}"
+        date = f"2001-{(i % 12) + 1:02d}-{(i % 27) + 1:02d}"
+        templates.append(
+            {
+                text_column: (
+                    f"Subject: meeting follow up\n"
+                    f"Hi team, please contact {name} at {email} or {phone} before {date}. "
+                    f"{name} is coordinating the {org} review in {city}. "
+                    f"Please keep the trading desk summary confidential until the next update."
+                )
+            }
+        )
+    return Dataset.from_list(templates)
 
 
 def load_spacy_model(model_name: str = "en_core_web_sm"):
