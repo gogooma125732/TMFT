@@ -1,3 +1,20 @@
+---
+language:
+- en
+library_name: peft
+pipeline_tag: text-generation
+base_model: EleutherAI/pythia-160m
+base_model_relation: adapter
+datasets:
+- cc0de/Enron_email
+tags:
+- lora
+- privacy
+- pii
+- membership-inference
+- masked-fine-tuning
+---
+
 # TMFT: Targeted Masked Fine-Tuning
 
 This project tests whether masking privacy-sensitive token losses during LoRA
