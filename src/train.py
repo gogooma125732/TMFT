@@ -207,7 +207,9 @@ class TMFTDataCollator:
             ner_labels = self.ner_labels or DEFAULT_NER_LABELS
             for row_idx, text in enumerate(texts):
                 offsets = [tuple(pair.tolist()) for pair in offset_mapping[row_idx]]
-                mask[row_idx] |= ner_mask(offsets, text, self.nlp_model, ner_labels)
+                max_seen_char = max((end for _, end in offsets), default=0)
+                text_for_ner = text[:max_seen_char]
+                mask[row_idx] |= ner_mask(offsets, text_for_ner, self.nlp_model, ner_labels)
 
         if self.method in {"tmft_mia", "tmft_combined"}:
             if self.target_model is None or self.reference_model is None:
