@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="821.99952pt" height="256.79952pt" viewBox="0 0 821.99952 256.79952" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-15T23:36:36.083539</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.9.1.post1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 256.79952
+L 821.99952 256.79952
+L 821.99952 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 24.352556 208.848296
+L 190.160599 208.848296
+Q 199.451567 208.848296 199.451567 199.714401
+L 199.451567 80.27116
+Q 199.451567 71.137265 190.160599 71.137265
+L 24.352556 71.137265
+Q 15.061588 71.137265 15.061588 80.27116
+L 15.061588 199.714401
+Q 15.061588 208.848296 24.352556 208.848296
+z
+" clip-path="url(#p23aa2548c8)" style="fill: #f7faff; stroke: #cfdae6; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 224.465712 208.848296
+L 390.273755 208.848296
+Q 399.564723 208.848296 399.564723 199.714401
+L 399.564723 80.27116
+Q 399.564723 71.137265 390.273755 71.137265
+L 224.465712 71.137265
+Q 215.174744 71.137265 215.174744 80.27116
+L 215.174744 199.714401
+Q 215.174744 208.848296 224.465712 208.848296
+z
+" clip-path="url(#p23aa2548c8)" style="fill: #f7faff; stroke: #cfdae6; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 424.578867 208.848296
+L 590.38691 208.848296
+Q 599.677878 208.848296 599.677878 199.714401
+L 599.677878 80.27116
+Q 599.677878 71.137265 590.38691 71.137265
+L 424.578867 71.137265
+Q 415.287899 71.137265 415.287899 80.27116
+L 415.287899 199.714401
+Q 415.287899 208.848296 424.578867 208.848296
+z
+" clip-path="url(#p23aa2548c8)" style="fill: #f7faff; stroke: #cfdae6; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 624.692022 208.848296
+L 790.500065 208.848296
+Q 799.791033 208.848296 799.791033 199.714401
+L 799.791033 80.27116
+Q 799.791033 71.137265 790.500065 71.137265
+L 624.692022 71.137265
+Q 615.401054 71.137265 615.401054 80.27116
+L 615.401054 199.714401
+Q 615.401054 208.848296 624.692022 208.848296
+z
+" clip-path="url(#p23aa2548c8)" style="fill: #f7faff; stroke: #cfdae6; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 201.451163 140.695388
+Q 206.597259 140.695388 210.28991 140.695388
+" clip-path="url(#p23aa2548c8)" style="fill: none; stroke: #2462b9; stroke-width: 1.3; stroke-linecap: round"/>
+    <path d="M 205.08991 138.095388
+L 210.28991 140.695388
+L 205.08991 143.295388
+z
+" clip-path="url(#p23aa2548c8)" style="fill: #2462b9; stroke: #2462b9; stroke-width: 1.3; stroke-linecap: round"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 401.564319 140.695388
+Q 406.710414 140.695388 410.403065 140.695388
+" clip-path="url(#p23aa2548c8)" style="fill: none; stroke: #2462b9; stroke-width: 1.3; stroke-linecap: round"/>
+    <path d="M 405.203065 138.095388
+L 410.403065 140.695388
+L 405.203065 143.295388
+z
+" clip-path="url(#p23aa2548c8)" style="fill: #2462b9; stroke: #2462b9; stroke-width: 1.3; stroke-linecap: round"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 601.677474 140.695388
+Q 606.82357 140.695388 610.516221 140.695388
+" clip-path="url(#p23aa2548c8)" style="fill: none; stroke: #2462b9; stroke-width: 1.3; stroke-linecap: round"/>
+    <path d="M 605.316221 138.095388
+L 610.516221 140.695388
+L 605.316221 143.295388
+z
+" clip-path="url(#p23aa2548c8)" style="fill: #2462b9; stroke: #2462b9; stroke-width: 1.3; stroke-linecap: round"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: #17324d; font: 700 16px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="17.920348" y="33.19647" transform="rotate(-0 17.920348 33.19647)">How targeted loss masking works</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: #2462b9; font: 700 10px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="32.214144" y="99.944164" transform="rotate(-0 32.214144 99.944164)">01</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: #17324d; font: 700 11.1px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="32.214144" y="128.048456" transform="rotate(-0 32.214144 128.048456)">Prepare text</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: #526476; font: 9.2px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(32.214144 166.656348)">Tokenize Enron emails</text>
+    <text style="fill: #526476; font: 9.2px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(32.214144 178.705976)">and identify PII targets</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: #2462b9; font: 700 10px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="232.3273" y="99.944164" transform="rotate(-0 232.3273 99.944164)">02</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: #17324d; font: 700 11.1px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="232.3273" y="128.048456" transform="rotate(-0 232.3273 128.048456)">Find sensitive tokens</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: #526476; font: 9.2px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(232.3273 166.656348)">NER + regex spans; optional</text>
+    <text style="fill: #526476; font: 9.2px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(232.3273 178.705976)">online MIA scores</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: #2462b9; font: 700 10px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="432.440455" y="99.944164" transform="rotate(-0 432.440455 99.944164)">03</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: #17324d; font: 700 11.1px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="432.440455" y="128.048456" transform="rotate(-0 432.440455 128.048456)">Mask their loss</text>
+   </g>
+   <g id="text_10">
+    <text style="fill: #526476; font: 9.2px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(432.440455 166.656348)">Set selected labels to −100</text>
+    <text style="fill: #526476; font: 9.2px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(432.440455 178.705976)">subject to a mask-ratio cap</text>
+   </g>
+   <g id="text_11">
+    <text style="fill: #2462b9; font: 700 10px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="632.553611" y="99.944164" transform="rotate(-0 632.553611 99.944164)">04</text>
+   </g>
+   <g id="text_12">
+    <text style="fill: #17324d; font: 700 11.1px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="632.553611" y="128.048456" transform="rotate(-0 632.553611 128.048456)">Evaluate</text>
+   </g>
+   <g id="text_13">
+    <text style="fill: #526476; font: 9.2px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(632.553611 166.656348)">Exact extraction, PPL,</text>
+    <text style="fill: #526476; font: 9.2px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif" transform="translate(632.553611 178.705976)">and MIA AUC</text>
+   </g>
+   <g id="text_14">
+    <text style="fill: #526476; font: 9px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="20.064417" y="236.952589" transform="rotate(-0 20.064417 236.952589)">Masking removes selected tokens from the training loss; it does not remove them from the input.</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p23aa2548c8">
+   <rect x="7.2" y="7.2" width="807.59952" height="242.39952"/>
+  </clipPath>
+ </defs>
+</svg>

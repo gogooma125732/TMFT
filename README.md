@@ -1,103 +1,68 @@
----
-language:
-- en
-library_name: peft
-pipeline_tag: text-generation
-base_model: EleutherAI/pythia-160m
-base_model_relation: adapter
-datasets:
-- cc0de/Enron_email
-tags:
-- lora
-- privacy
-- pii
-- membership-inference
-- masked-fine-tuning
----
-
 # TMFT: Targeted Masked Fine-Tuning
 
-This project tests whether masking privacy-sensitive token losses during LoRA
-fine-tuning reduces PII memorization with less utility degradation than random
-masking. It is an empirical mitigation study, not differential privacy or
-machine unlearning.
+**Can a language model learn from emails while memorizing fewer private strings?** TMFT studies a simple intervention during LoRA fine-tuning: omit selected privacy-sensitive tokens from the training loss. We compare targeted masking with ordinary fine-tuning and random loss masking on a Pythia-160M model trained with Enron emails.
 
-## Vessel Setup
+![Four-step TMFT workflow: prepare text, find sensitive tokens, mask their loss, and evaluate extraction and utility](docs/figures/method_overview.svg)
 
-Upload the entire `tmft_project/` directory and open a terminal in that
-directory.
+## Results at a glance
+
+In the reported 500 exact-extraction attacks, the baseline exposed 24 targets (TER **4.8%**). The core TMFT-NER condition exposed 11 (**2.2%**, a **54.2% relative reduction**) with a **+0.744** increase in held-out perplexity. The lowest TER in the reported ablations was **Combined-p90: 7/500 (1.4%)**, a **70.8% relative reduction**, with **+1.093** perplexity. These are different experimental conditions, not interchangeable headline results.
+
+![Scatterplot of eleven reported runs, with target extraction rate against increase in held-out perplexity](docs/figures/privacy_utility_tradeoff.svg)
+
+*Lower is preferable on both axes. These are discrete reported runs, not a continuous frontier; the ablations were explored separately from the five core conditions.*
+
+| Condition | Exact extractions | TER ↓ | Held-out PPL ↓ | ΔPPL vs. baseline ↓ | Masked tokens |
+|:--|--:|--:|--:|--:|--:|
+| Baseline | 24/500 | 4.8% | 13.226 | — | 0% |
+| RMFT-15 | 23/500 | 4.6% | 13.257 | +0.031 | 14.99% |
+| TMFT-NER | 11/500 | 2.2% | 13.970 | +0.744 | 21.61% |
+| TMFT-MIA | 12/500 | 2.4% | 14.840 | +1.614 | 24.87% |
+| Combined | 11/500 | 2.2% | 14.845 | +1.619 | 40.51% |
+| **Combined-p90 (ablation)** | **7/500** | **1.4%** | **14.318** | **+1.093** | **29.26%** |
+
+At the same reported **21.61%** masking budget, TMFT-NER had **2.2% TER** versus **4.6%** for RMFT-21.6. Its utility cost was also higher (**+0.744** versus **+0.050** ΔPPL), so targeted masking did not dominate random masking on every metric. The [full 11-condition data](docs/data/summary_metrics.csv) also include seen-target extraction rate, two membership inference AUCs, and skip counts. See the [data notes](docs/data/README.md) for definitions and provenance.
+
+## Method
+
+1. **NER masking:** spaCy entity recognition and email/phone regexes identify sensitive character spans, which are mapped to tokenizer positions.
+2. **MIA-guided masking:** after a warm-up of 50 batches, compare token scores from the current model with a frozen base model and mask the highest-risk fraction selected by the threshold.
+3. **Combined masking:** use the union of the NER and MIA masks. Set selected training labels to `-100`, so they contribute no cross-entropy loss. Skip a sample occurrence when the mask-ratio cap would be exceeded.
+
+The core CLI conditions are `baseline`, `rmft` (random 15% masking), `tmft_ner`, `tmft_mia`, and `tmft_combined`. The additional p90 and mask-budget variants are analysis runs reported in the summary data, not separate `--method` choices in the current CLI.
+
+## Evaluation and scope
+
+The reported setup uses **Pythia-160M + LoRA** and the **Enron Email** dataset. Exact extraction tests give the model a 50-token prefix and check 50 greedy-generated tokens against a normalized PII target. TER is the success rate over 500 attacks; SER uses 454 targets seen in training. Utility is held-out perplexity, and membership inference is summarized by Loss-MIA and Min-K AUC.
+
+The numbers above come from the project's summary slides and were transcribed into a [versioned CSV](docs/data/summary_metrics.csv); this repository does not include the original checkpoints or raw evaluation outputs for those exact runs. They reflect one model and dataset setup, without confidence intervals. The study evaluates an empirical mitigation: it does **not** provide differential privacy guarantees or machine unlearning.
+
+## Run the experiment
+
+Install the pinned dependencies from the repository root, then download the spaCy model:
 
 ```bash
-python -m pip install -U pip
-python -m pip uninstall -y transformers peft accelerate tokenizers huggingface_hub datasets
 python -m pip install -r requirements.txt
 python -m spacy download en_core_web_sm
 ```
 
-Restart the Jupyter kernel after installation. The tested compatibility stack
-uses PyTorch 2.3.1, Transformers 4.41.2, PEFT 0.11.1, and Datasets 2.20.0.
-
-## End-to-End Experiment
-
-Prepare real PII-containing Enron splits and a real prefix-target evaluation
-set:
+The tested stack uses PyTorch 2.3.1, Transformers 4.41.2, PEFT 0.11.1, and Datasets 2.20.0. In a Jupyter environment, restart the kernel after installation.
 
 ```bash
-python main.py --mode prepare --force_prepare
+python main.py --mode prepare --force_prepare  # prepare real Enron splits and PII targets
+python main.py --mode train --method all        # train the five core conditions
+python main.py --mode eval --method all         # evaluate privacy and utility
+python main.py --mode plot                      # plot the current run's results
 ```
 
-Train all conditions:
+Or run the full pipeline with `python main.py --mode all --method all --force_prepare`. The interactive entry point is [`tmft_experiment.ipynb`](tmft_experiment.ipynb). The default [configuration](configs/config.yaml) disables synthetic fallback, so dataset access failures should stop preparation rather than silently replace real data.
+
+Run outputs are written under `data/processed/`, `data/pii_eval.json`, and `results/` (adapters, tables, figures). These generated paths are ignored by Git; inspect them before sharing because the evaluation targets and model artifacts may expose private strings.
+
+To regenerate the **README figures from the reported CSV**, run:
 
 ```bash
-python main.py --mode train --method all
+python scripts/render_readme_figures.py
 ```
 
-Evaluate TER, SER, held-out perplexity, MDP, Loss-MIA AUC, and Min-K MIA AUC:
-
-```bash
-python main.py --mode eval --method all
-```
-
-Generate result figures:
-
-```bash
-python main.py --mode plot
-```
-
-The full pipeline can be launched with:
-
-```bash
-python main.py --mode all --method all --force_prepare
-```
-
-For an interactive run, execute `tmft_experiment.ipynb` from top to bottom.
-
-## Experimental Conditions
-
-- `baseline`: standard LoRA fine-tuning
-- `rmft`: random 15% loss masking
-- `tmft_ner`: loss masking at spaCy plus regex PII spans
-- `tmft_mia`: online token masking where the current model is more confident
-  than the frozen base model
-- `tmft_combined`: union of NER and post-warm-up MIA masks
-
-## Outputs
-
-- `data/processed/`: train, validation, and test DatasetDict
-- `data/pii_eval.json`: automatically generated real PII prefix-target attacks
-- `results/<method>/`: LoRA adapters and training metadata
-- `results/tables/main_results.csv`: submission-ready numeric table
-- `results/figures/`: PNG and PDF privacy/utility figures
-
-Do not report results if preprocessing prints a synthetic fallback warning.
-The final config disables fallback so an unavailable real dataset fails loudly.
-
-## Hugging Face Upload
-
-```bash
-huggingface-cli login
-python main.py --mode upload --method tmft_combined \
-  --hf_repo_id YOUR_USERNAME/tmft-pythia-160m-tmft-combined
-```
-
-Use `--public` only after checking that the saved artifacts contain no raw PII.
+This plotting command redraws the static README figures. It does not train the model or recompute the reported metrics. The experiment's `--mode plot` command instead plots results from a fresh local run.
