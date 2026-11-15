@@ -1,6 +1,14 @@
 # TMFT: Targeted Masked Fine-Tuning
 
+[🤗 **Hugging Face model & artifacts**](https://huggingface.co/zeronamoni/TMFT) · `Pythia-160M` · `LoRA`
+
 **Can a language model learn from emails while memorizing fewer private strings?** TMFT studies a simple intervention during LoRA fine-tuning: omit selected privacy-sensitive tokens from the training loss. We compare targeted masking with ordinary fine-tuning and random loss masking on a Pythia-160M model trained with Enron emails.
+
+[Results](#results-at-a-glance) · [Method](#method) · [Run the experiment](#run-the-experiment)
+
+## Model and artifacts
+
+The [Hugging Face repository](https://huggingface.co/zeronamoni/TMFT) hosts the `tmft_combined` LoRA adapter for `EleutherAI/pythia-160m`, adapters for the other core conditions, and the original experiment tables and figures. The adapter is loaded on top of the base model; it is not a standalone full-model checkpoint.
 
 ## Results at a glance
 
