@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="547.38pt" height="269.532pt" viewBox="0 0 547.38 269.532" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-15T23:42:02.764278</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.9.1.post1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 269.532
+L 547.38 269.532
+L 547.38 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 24.543 211.450608
+L 522.837 211.450608
+L 522.837 189.252432
+L 24.543 189.252432
+z
+" clip-path="url(#ped993dae51)" style="fill: #f1f1f1"/>
+   </g>
+   <g id="line2d_1">
+    <path d="M 24.543 59.0904
+L 522.837 59.0904
+" clip-path="url(#ped993dae51)" style="fill: none; stroke: #202020; stroke-width: 0.95; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 24.543 84.820104
+L 522.837 84.820104
+" clip-path="url(#ped993dae51)" style="fill: none; stroke: #767676; stroke-width: 0.65; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_3">
+    <path d="M 24.543 187.73892
+L 522.837 187.73892
+" clip-path="url(#ped993dae51)" style="fill: none; stroke: #767676; stroke-width: 0.65; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_4">
+    <path d="M 24.543 212.96412
+L 522.837 212.96412
+" clip-path="url(#ped993dae51)" style="fill: none; stroke: #202020; stroke-width: 0.95; stroke-linecap: square"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: #202020; font: 700 12px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: start" x="24.543" y="31.90887" transform="rotate(-0 24.543 31.90887)">Table 1: Privacy and utility across masking strategies.</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: #505050; font: 9.4px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: start" x="24.543" y="47.959885" transform="rotate(-0 24.543 47.959885)">Core conditions and the lowest-TER ablation. Values match the reported summary results.</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: #202020; font: 700 9.6px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: start" x="29.844" y="75.11601" transform="rotate(-0 29.844 75.11601)">Method</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: #202020; font: 700 9.6px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="204.777" y="75.11601" transform="rotate(-0 204.777 75.11601)">Exact extraction</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: #202020; font: 700 9.6px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="284.292" y="75.16701" transform="rotate(-0 284.292 75.16701)">TER (%) ↓</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: #202020; font: 700 9.6px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="358.506" y="75.11601" transform="rotate(-0 358.506 75.11601)">PPL ↓</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: #202020; font: 700 9.6px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="432.72" y="75.16026" transform="rotate(-0 432.72 75.16026)">ΔPPL ↓</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: #202020; font: 700 9.6px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: end" x="506.934" y="75.12201" transform="rotate(-0 506.934 75.12201)">Mask (%)</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: start" x="29.844" y="103.114324" transform="rotate(-0 29.844 103.114324)">Baseline</text>
+   </g>
+   <g id="text_10">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="204.777" y="103.114324" transform="rotate(-0 204.777 103.114324)">24/500</text>
+   </g>
+   <g id="text_11">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="284.292" y="103.114324" transform="rotate(-0 284.292 103.114324)">4.8</text>
+   </g>
+   <g id="text_12">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="358.506" y="103.114324" transform="rotate(-0 358.506 103.114324)">13.226</text>
+   </g>
+   <g id="text_13">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="432.72" y="103.114324" transform="rotate(-0 432.72 103.114324)">—</text>
+   </g>
+   <g id="text_14">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: end" x="506.934" y="103.114324" transform="rotate(-0 506.934 103.114324)">0</text>
+   </g>
+   <g id="text_15">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: start" x="29.844" y="121.52872" transform="rotate(-0 29.844 121.52872)">RMFT-15</text>
+   </g>
+   <g id="text_16">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="204.777" y="121.52872" transform="rotate(-0 204.777 121.52872)">23/500</text>
+   </g>
+   <g id="text_17">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="284.292" y="121.52872" transform="rotate(-0 284.292 121.52872)">4.6</text>
+   </g>
+   <g id="text_18">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="358.506" y="121.52872" transform="rotate(-0 358.506 121.52872)">13.257</text>
+   </g>
+   <g id="text_19">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="432.72" y="121.52872" transform="rotate(-0 432.72 121.52872)">+0.031</text>
+   </g>
+   <g id="text_20">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: end" x="506.934" y="121.52872" transform="rotate(-0 506.934 121.52872)">14.99</text>
+   </g>
+   <g id="text_21">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: start" x="29.844" y="139.943116" transform="rotate(-0 29.844 139.943116)">TMFT-NER</text>
+   </g>
+   <g id="text_22">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="204.777" y="139.943116" transform="rotate(-0 204.777 139.943116)">11/500</text>
+   </g>
+   <g id="text_23">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="284.292" y="139.943116" transform="rotate(-0 284.292 139.943116)">2.2</text>
+   </g>
+   <g id="text_24">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="358.506" y="139.943116" transform="rotate(-0 358.506 139.943116)">13.970</text>
+   </g>
+   <g id="text_25">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="432.72" y="139.943116" transform="rotate(-0 432.72 139.943116)">+0.744</text>
+   </g>
+   <g id="text_26">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: end" x="506.934" y="139.943116" transform="rotate(-0 506.934 139.943116)">21.61</text>
+   </g>
+   <g id="text_27">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: start" x="29.844" y="158.357512" transform="rotate(-0 29.844 158.357512)">TMFT-MIA</text>
+   </g>
+   <g id="text_28">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="204.777" y="158.357512" transform="rotate(-0 204.777 158.357512)">12/500</text>
+   </g>
+   <g id="text_29">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="284.292" y="158.357512" transform="rotate(-0 284.292 158.357512)">2.4</text>
+   </g>
+   <g id="text_30">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="358.506" y="158.357512" transform="rotate(-0 358.506 158.357512)">14.840</text>
+   </g>
+   <g id="text_31">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="432.72" y="158.357512" transform="rotate(-0 432.72 158.357512)">+1.614</text>
+   </g>
+   <g id="text_32">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: end" x="506.934" y="158.357512" transform="rotate(-0 506.934 158.357512)">24.87</text>
+   </g>
+   <g id="text_33">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: start" x="29.844" y="176.771908" transform="rotate(-0 29.844 176.771908)">Combined</text>
+   </g>
+   <g id="text_34">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="204.777" y="176.771908" transform="rotate(-0 204.777 176.771908)">11/500</text>
+   </g>
+   <g id="text_35">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="284.292" y="176.771908" transform="rotate(-0 284.292 176.771908)">2.2</text>
+   </g>
+   <g id="text_36">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="358.506" y="176.771908" transform="rotate(-0 358.506 176.771908)">14.845</text>
+   </g>
+   <g id="text_37">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="432.72" y="176.771908" transform="rotate(-0 432.72 176.771908)">+1.619</text>
+   </g>
+   <g id="text_38">
+    <text style="fill: #202020; font: 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: end" x="506.934" y="176.771908" transform="rotate(-0 506.934 176.771908)">40.51</text>
+   </g>
+   <g id="text_39">
+    <text style="fill: #202020; font: 700 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: start" x="29.844" y="202.671051" transform="rotate(-0 29.844 202.671051)">Combined-p90 (ablation)</text>
+   </g>
+   <g id="text_40">
+    <text style="fill: #202020; font: 700 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="204.777" y="202.592926" transform="rotate(-0 204.777 202.592926)">7/500</text>
+   </g>
+   <g id="text_41">
+    <text style="fill: #202020; font: 700 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="284.292" y="202.592926" transform="rotate(-0 284.292 202.592926)">1.4</text>
+   </g>
+   <g id="text_42">
+    <text style="fill: #202020; font: 700 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="358.506" y="202.592926" transform="rotate(-0 358.506 202.592926)">14.318</text>
+   </g>
+   <g id="text_43">
+    <text style="fill: #202020; font: 700 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: middle" x="432.72" y="202.592926" transform="rotate(-0 432.72 202.592926)">+1.093</text>
+   </g>
+   <g id="text_44">
+    <text style="fill: #202020; font: 700 10px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: end" x="506.934" y="202.592926" transform="rotate(-0 506.934 202.592926)">29.26</text>
+   </g>
+   <g id="text_45">
+    <text style="fill: #505050; font: 9px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: start" x="24.543" y="231.514172" transform="rotate(-0 24.543 231.514172)">TER: target extraction rate. ΔPPL: perplexity increase vs. the unrounded baseline (13.2256).</text>
+   </g>
+   <g id="text_46">
+    <text style="fill: #505050; font: 9px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: start" x="24.543" y="245.388032" transform="rotate(-0 24.543 245.388032)">The shaded row is a separate ablation; figures are reported observations, not confidence bounds.</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="ped993dae51">
+   <rect x="8.64" y="8.64" width="530.1" height="252.252"/>
+  </clipPath>
+ </defs>
+</svg>
