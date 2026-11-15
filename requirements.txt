@@ -4,6 +4,7 @@ evaluate
 huggingface_hub==0.23.4
 ipykernel
 matplotlib
+Pillow
 nltk
 numpy
 pandas

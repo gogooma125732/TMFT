@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-11-15T23:42:02.764278</dc:date>
+    <dc:date>2026-11-15T23:50:45.831560</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -35,27 +35,27 @@ L 522.837 211.450608
 L 522.837 189.252432
 L 24.543 189.252432
 z
-" clip-path="url(#ped993dae51)" style="fill: #f1f1f1"/>
+" clip-path="url(#p22b2911e88)" style="fill: #f1f1f1"/>
    </g>
    <g id="line2d_1">
     <path d="M 24.543 59.0904
 L 522.837 59.0904
-" clip-path="url(#ped993dae51)" style="fill: none; stroke: #202020; stroke-width: 0.95; stroke-linecap: square"/>
+" clip-path="url(#p22b2911e88)" style="fill: none; stroke: #202020; stroke-width: 0.95; stroke-linecap: square"/>
    </g>
    <g id="line2d_2">
     <path d="M 24.543 84.820104
 L 522.837 84.820104
-" clip-path="url(#ped993dae51)" style="fill: none; stroke: #767676; stroke-width: 0.65; stroke-linecap: square"/>
+" clip-path="url(#p22b2911e88)" style="fill: none; stroke: #767676; stroke-width: 0.65; stroke-linecap: square"/>
    </g>
    <g id="line2d_3">
     <path d="M 24.543 187.73892
 L 522.837 187.73892
-" clip-path="url(#ped993dae51)" style="fill: none; stroke: #767676; stroke-width: 0.65; stroke-linecap: square"/>
+" clip-path="url(#p22b2911e88)" style="fill: none; stroke: #767676; stroke-width: 0.65; stroke-linecap: square"/>
    </g>
    <g id="line2d_4">
     <path d="M 24.543 212.96412
 L 522.837 212.96412
-" clip-path="url(#ped993dae51)" style="fill: none; stroke: #202020; stroke-width: 0.95; stroke-linecap: square"/>
+" clip-path="url(#p22b2911e88)" style="fill: none; stroke: #202020; stroke-width: 0.95; stroke-linecap: square"/>
    </g>
    <g id="text_1">
     <text style="fill: #202020; font: 700 12px 'Times New Roman', 'DejaVu Serif', serif; text-anchor: start" x="24.543" y="31.90887" transform="rotate(-0 24.543 31.90887)">Table 1: Privacy and utility across masking strategies.</text>
@@ -198,7 +198,7 @@ L 522.837 212.96412
   </g>
  </g>
  <defs>
-  <clipPath id="ped993dae51">
+  <clipPath id="p22b2911e88">
    <rect x="8.64" y="8.64" width="530.1" height="252.252"/>
   </clipPath>
  </defs>

@@ -2,21 +2,23 @@
 
 **Can a language model learn from emails while memorizing fewer private strings?** TMFT studies a simple intervention during LoRA fine-tuning: omit selected privacy-sensitive tokens from the training loss. We compare targeted masking with ordinary fine-tuning and random loss masking on a Pythia-160M model trained with Enron emails.
 
-![Four-step TMFT workflow: prepare text, find sensitive tokens, mask their loss, and evaluate extraction and utility](docs/figures/method_overview.svg)
-
 ## Results at a glance
 
 In the reported 500 exact-extraction attacks, the baseline exposed 24 targets (TER **4.8%**). The core TMFT-NER condition exposed 11 (**2.2%**, a **54.2% relative reduction**) with a **+0.744** increase in held-out perplexity. The lowest TER in the reported ablations was **Combined-p90: 7/500 (1.4%)**, a **70.8% relative reduction**, with **+1.093** perplexity. These are different experimental conditions, not interchangeable headline results.
 
-![Scatterplot of eleven reported runs, with target extraction rate against increase in held-out perplexity](docs/figures/privacy_utility_tradeoff.svg)
+![Paper-style two-panel scatterplot of all eleven core and ablation runs, showing target extraction rate against increase in held-out perplexity](docs/figures/privacy_utility_paper_v3.png)
 
 *Lower is preferable on both axes. These are discrete reported runs, not a continuous frontier; the ablations were explored separately from the five core conditions.*
 
-![Paper-style table of six reported conditions, preserving exact extractions, TER, PPL, ΔPPL, and masking percentages](docs/figures/summary_results_table.svg)
+![Paper-style table of six reported conditions, preserving exact extractions, TER, PPL, ΔPPL, and masking percentages](docs/figures/summary_results_table_paper_v3.png)
 
 At the same reported **21.61%** masking budget, TMFT-NER had **2.2% TER** versus **4.6%** for RMFT-21.6. Its utility cost was also higher (**+0.744** versus **+0.050** ΔPPL), so targeted masking did not dominate random masking on every metric. The [full 11-condition data](docs/data/summary_metrics.csv) also include seen-target extraction rate, two membership inference AUCs, and skip counts. See the [data notes](docs/data/README.md) for definitions and provenance.
 
 ## Method
+
+![Animated token-level storyboard showing synthetic input tokens, NER and MIA signals, union masking, and training labels set to minus 100](docs/figures/method_overview_animatic_v3.gif)
+
+*The storyboard uses synthetic text to illustrate the mechanism. [View the still image](docs/figures/method_overview_animatic_v3.png).*
 
 1. **NER masking:** spaCy entity recognition and email/phone regexes identify sensitive character spans, which are mapped to tokenizer positions.
 2. **MIA-guided masking:** after a warm-up of 50 batches, compare token scores from the current model with a frozen base model and mask the highest-risk fraction selected by the threshold.

@@ -13,7 +13,8 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyArrowPatch, Rectangle
+from matplotlib.patches import Rectangle
+from render_method_animatic import render_method_animatic
 
 plt.rcParams.update({
     "font.family": "serif",
@@ -57,60 +58,51 @@ def save(fig: plt.Figure, name: str) -> None:
 
 
 def tradeoff(rows: list[dict]) -> None:
-    fig, ax = plt.subplots(figsize=(9.2, 5.9))
+    """Two matched panels keep close operating points legible at README width."""
+    fig, axes = plt.subplots(1, 2, figsize=(10.4, 5.3), sharex=True, sharey=True)
     fig.patch.set_facecolor(PAPER)
-    fig.subplots_adjust(left=0.105, right=0.975, top=0.80, bottom=0.27)
-    ax.set_facecolor(PAPER)
-    for spine in ax.spines.values():
-        spine.set_linewidth(0.65)
-        spine.set_color(RULE)
-    ax.yaxis.grid(True, color=GRID, linewidth=0.55)
-    ax.set_axisbelow(True)
-
-    for group, color, marker, label in (
-        ("core", BLUE, "s", "Core experiments"),
-        ("ablation", RUST, "o", "Ablations"),
-    ):
-        subset = [r for r in rows if r["group"] == group]
-        ax.scatter(
-            [r["delta_ppl"] for r in subset],
-            [r["ter_pct"] for r in subset],
-            s=40, marker=marker, facecolor=PAPER, edgecolor=color,
-            linewidth=1.35, zorder=3, label=label,
-        )
-
+    fig.subplots_adjust(left=0.075, right=0.985, top=0.82, bottom=0.25, wspace=0.14)
     offsets = {
-        "Baseline": (6, 9), "RMFT-15": (6, -13), "RMFT-21.6": (6, 9),
-        "NER-strict": (6, 8), "NER-moderate": (6, -12),
-        "TMFT-NER": (6, -13), "MIA-p90": (6, 8),
-        "Combined-p90": (6, -12), "Comb-p90 cap65": (6, 9),
-        "TMFT-MIA": (-6, 9), "Combined": (-6, -13),
+        "Baseline": (7, 9), "RMFT-15": (7, -13),
+        "TMFT-NER": (7, -12), "TMFT-MIA": (-7, 9), "Combined": (-7, -12),
+        "RMFT-21.6": (7, 9), "NER-strict": (7, -11),
+        "NER-moderate": (7, 9), "MIA-p90": (7, 9),
+        "Combined-p90": (7, -12), "Comb-p90 cap65": (-7, 9),
     }
-    for row in rows:
-        dx, dy = offsets[row["method"]]
-        ax.annotate(
-            row["method"], (row["delta_ppl"], row["ter_pct"]),
-            xytext=(dx, dy), textcoords="offset points",
-            ha="right" if dx < 0 else "left", va="center",
-            fontsize=8.1, color=INK,
-        )
-
-    ax.set_xlim(-0.08, 1.83)
-    ax.set_ylim(1.0, 5.25)
-    ax.set_xticks([0, 0.5, 1.0, 1.5])
-    ax.set_yticks([1, 2, 3, 4, 5])
-    ax.set_xlabel("Increase in held-out perplexity vs. baseline (ΔPPL)", labelpad=7)
-    ax.set_ylabel("Target extraction rate (TER, %)", labelpad=7)
-    ax.tick_params(length=3, width=0.65, color=RULE, labelsize=9)
-    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.11), ncol=2,
-              frameon=False, handletextpad=0.3, columnspacing=2.2, fontsize=9)
-    fig.text(0.105, 0.155, "Figure 2: Privacy–utility trade-off.", fontsize=10.8,
-             weight="bold", color=INK)
-    fig.text(0.105, 0.105,
-             "Each marker is one reported run; lower TER and lower ΔPPL are preferable.\n"
-             "Core and ablation settings are shown separately. Error bars are unavailable.",
-             fontsize=9.3, color=INK, linespacing=1.2)
-    save(fig, "privacy_utility_tradeoff")
+    for ax, group, label, color, marker in (
+        (axes[0], "core", "(a) Core experiments", BLUE, "s"),
+        (axes[1], "ablation", "(b) Ablation runs", RUST, "o"),
+    ):
+        subset = [row for row in rows if row["group"] == group]
+        ax.set_facecolor(PAPER)
+        for spine in ax.spines.values():
+            spine.set_color(RULE)
+            spine.set_linewidth(0.65)
+        ax.yaxis.grid(True, color=GRID, linewidth=0.55)
+        ax.set_axisbelow(True)
+        ax.scatter([r["delta_ppl"] for r in subset], [r["ter_pct"] for r in subset],
+                   s=47, marker=marker, facecolor=PAPER, edgecolor=color,
+                   linewidth=1.4, zorder=3)
+        for row in subset:
+            dx, dy = offsets[row["method"]]
+            ax.annotate(row["method"], (row["delta_ppl"], row["ter_pct"]),
+                        xytext=(dx, dy), textcoords="offset points",
+                        ha="right" if dx < 0 else "left", va="center",
+                        fontsize=8.1, color=INK)
+        ax.set_title(label, fontsize=11.2, weight="bold", loc="left", pad=10)
+        ax.set_xlim(-0.12, 1.88)
+        ax.set_ylim(1.0, 5.25)
+        ax.set_xticks([0, 0.5, 1.0, 1.5])
+        ax.set_yticks([1, 2, 3, 4, 5])
+        ax.tick_params(length=3, width=0.65, color=RULE, labelsize=9)
+    fig.supxlabel("Increase in held-out perplexity vs. baseline (ΔPPL)", y=0.175, fontsize=10)
+    axes[0].set_ylabel("Target extraction rate (TER, %)", labelpad=7)
+    fig.text(0.075, 0.105, "Figure 2: Privacy–utility operating points.",
+             fontsize=10.8, weight="bold", color=INK)
+    fig.text(0.075, 0.06,
+             "Each point is one reported run. Both axes are matched; lower left is preferable. Error bars are unavailable.",
+             fontsize=9.1, color=INK)
+    save(fig, "privacy_utility_paper_v3")
 
 
 def results_table(rows: list[dict]) -> None:
@@ -167,42 +159,12 @@ def results_table(rows: list[dict]) -> None:
     ax.text(0.03, 0.07,
             "The shaded row is a separate ablation; figures are reported observations, not confidence bounds.",
             fontsize=9, color=MUTED, va="center")
-    save(fig, "summary_results_table")
-
-
-def overview() -> None:
-    fig, ax = plt.subplots(figsize=(9.7, 2.75))
-    fig.patch.set_facecolor(PAPER)
-    ax.set_xlim(0, 9.7)
-    ax.set_ylim(0, 2.75)
-    ax.axis("off")
-    boxes = [
-        (0.1, "1. Prepare text", "Tokenize Enron emails\nand identify PII targets"),
-        (2.55, "2. Find sensitive tokens", "NER + regex spans; optional\nonline MIA scores"),
-        (5.0, "3. Mask their loss", "Set selected labels to −100\nunder a mask-ratio cap"),
-        (7.45, "4. Evaluate", "Exact extraction, PPL,\nand MIA AUC"),
-    ]
-    for x, title, body in boxes:
-        ax.add_patch(Rectangle((x, 0.78), 2.15, 1.25, fill=False,
-                               edgecolor=RULE, linewidth=0.7))
-        ax.text(x + 0.12, 1.76, title, fontsize=10.5, weight="bold", color=INK, va="top")
-        ax.text(x + 0.12, 1.38, body, fontsize=9.1, color=INK,
-                va="top", linespacing=1.3)
-    for x in (2.30, 4.75, 7.20):
-        ax.add_patch(FancyArrowPatch((x, 1.405), (x + 0.20, 1.405),
-                                     arrowstyle="->", mutation_scale=10,
-                                     linewidth=0.9, color=INK))
-    ax.text(0.10, 0.50, "Figure 1: Targeted loss masking pipeline.",
-            fontsize=10.5, weight="bold", color=INK)
-    ax.text(0.10, 0.20,
-            "Selected tokens remain in the input; their labels are omitted from the training loss.",
-            fontsize=9.2, color=MUTED)
-    save(fig, "method_overview")
+    save(fig, "summary_results_table_paper_v3")
 
 
 if __name__ == "__main__":
     rows = load_rows()
     tradeoff(rows)
     results_table(rows)
-    overview()
+    render_method_animatic()
     print(f"Wrote paper-style README figures to {OUT}")
