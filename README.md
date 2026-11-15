@@ -6,19 +6,21 @@
 
 In the reported 500 exact-extraction attacks, the baseline exposed 24 targets (TER **4.8%**). The core TMFT-NER condition exposed 11 (**2.2%**, a **54.2% relative reduction**) with a **+0.744** increase in held-out perplexity. The lowest TER in the reported ablations was **Combined-p90: 7/500 (1.4%)**, a **70.8% relative reduction**, with **+1.093** perplexity. These are different experimental conditions, not interchangeable headline results.
 
-![Paper-style two-panel scatterplot of all eleven core and ablation runs, showing target extraction rate against increase in held-out perplexity](docs/figures/privacy_utility_paper_v3.png)
+![Two-panel scatterplot of eleven core and ablation runs, showing target extraction rate against increase in held-out perplexity](docs/figures/privacy_utility_paper_v4.png)
 
-*Lower is preferable on both axes. These are discrete reported runs, not a continuous frontier; the ablations were explored separately from the five core conditions.*
+**Figure 2: Privacy–utility operating points.** Each point is one run reported in the summary slides. The panels use the same scales and separate core experiments from ablations by color and marker. The dashed line marks the baseline TER (4.8%); the lightly shaded area falls below it. Lower TER and smaller ΔPPL are preferable. Error bars were not reported.
 
-![Paper-style table of six reported conditions, preserving exact extractions, TER, PPL, ΔPPL, and masking percentages](docs/figures/summary_results_table_paper_v3.png)
+![Table of six reported conditions, preserving exact extractions, TER, PPL, ΔPPL, and masking percentages](docs/figures/summary_results_table_paper_v4.png)
+
+**Table 1: Privacy and utility across masking strategies.** The table shows the five core conditions and the lowest-TER ablation, Combined-p90 (shaded). Values match the reported summary results. TER is target extraction rate. ΔPPL is measured against the unrounded baseline PPL of 13.2256. These are reported observations without confidence intervals.
 
 At the same reported **21.61%** masking budget, TMFT-NER had **2.2% TER** versus **4.6%** for RMFT-21.6. Its utility cost was also higher (**+0.744** versus **+0.050** ΔPPL), so targeted masking did not dominate random masking on every metric. The [full 11-condition data](docs/data/summary_metrics.csv) also include seen-target extraction rate, two membership inference AUCs, and skip counts. See the [data notes](docs/data/README.md) for definitions and provenance.
 
 ## Method
 
-![Animated token-level storyboard showing synthetic input tokens, NER and MIA signals, union masking, and training labels set to minus 100](docs/figures/method_overview_animatic_v3.gif)
+![Animated token-level storyboard showing synthetic input tokens, NER and MIA signals, union masking, and training labels set to minus 100](docs/figures/method_overview_animatic_v4.gif)
 
-*The storyboard uses synthetic text to illustrate the mechanism. [View the still image](docs/figures/method_overview_animatic_v3.png).*
+**Figure 1: Targeted loss masking pipeline.** This animated example uses synthetic text. NER/regex and online MIA select token positions; their union is excluded from the training loss by setting the corresponding labels to `-100`. The input tokens remain visible to the model. [View the still image](docs/figures/method_overview_animatic_v4.png).
 
 1. **NER masking:** spaCy entity recognition and email/phone regexes identify sensitive character spans, which are mapped to tokenizer positions.
 2. **MIA-guided masking:** after a warm-up of 50 batches, compare token scores from the current model with a frozen base model and mask the highest-risk fraction selected by the threshold.
@@ -60,4 +62,4 @@ To regenerate the **README figures from the reported CSV**, run:
 python scripts/render_readme_figures.py
 ```
 
-This plotting command redraws the static README figures. It does not train the model or recompute the reported metrics. The experiment's `--mode plot` command instead plots results from a fresh local run.
+This command redraws the README figures and animation. It does not train the model or recompute the reported metrics. The experiment's `--mode plot` command instead plots results from a fresh local run.
