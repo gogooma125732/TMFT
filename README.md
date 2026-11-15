@@ -14,20 +14,6 @@ In the reported 500 exact-extraction attacks, the baseline exposed 24 targets (T
 
 ![Paper-style table of six reported conditions, preserving exact extractions, TER, PPL, ΔPPL, and masking percentages](docs/figures/summary_results_table.svg)
 
-<details>
-<summary>Result values as text</summary>
-
-| Condition | Exact extractions | TER ↓ | Held-out PPL ↓ | ΔPPL vs. baseline ↓ | Masked tokens |
-|:--|--:|--:|--:|--:|--:|
-| Baseline | 24/500 | 4.8% | 13.226 | — | 0% |
-| RMFT-15 | 23/500 | 4.6% | 13.257 | +0.031 | 14.99% |
-| TMFT-NER | 11/500 | 2.2% | 13.970 | +0.744 | 21.61% |
-| TMFT-MIA | 12/500 | 2.4% | 14.840 | +1.614 | 24.87% |
-| Combined | 11/500 | 2.2% | 14.845 | +1.619 | 40.51% |
-| **Combined-p90 (ablation)** | **7/500** | **1.4%** | **14.318** | **+1.093** | **29.26%** |
-
-</details>
-
 At the same reported **21.61%** masking budget, TMFT-NER had **2.2% TER** versus **4.6%** for RMFT-21.6. Its utility cost was also higher (**+0.744** versus **+0.050** ΔPPL), so targeted masking did not dominate random masking on every metric. The [full 11-condition data](docs/data/summary_metrics.csv) also include seen-target extraction rate, two membership inference AUCs, and skip counts. See the [data notes](docs/data/README.md) for definitions and provenance.
 
 ## Method
